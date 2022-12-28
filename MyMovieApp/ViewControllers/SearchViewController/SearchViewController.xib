@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait" appearance="light"/>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <capability name="Named colors" minToolsVersion="9.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SearchViewController" customModule="MyMovieApp" customModuleProvider="target">
+            <connections>
+                <outlet property="resultCollectionView" destination="UpY-YK-uWe" id="Rqd-lc-vlG"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Ig-tk-MLR">
+                    <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                    <subviews>
+                        <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="none" translatesAutoresizingMaskIntoConstraints="NO" id="UpY-YK-uWe">
+                            <rect key="frame" x="20" y="0.0" width="374" height="855"/>
+                            <color key="backgroundColor" name="background"/>
+                            <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="FYv-pF-oQQ">
+                                <size key="itemSize" width="128" height="128"/>
+                                <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                            </collectionViewFlowLayout>
+                        </collectionView>
+                    </subviews>
+                    <color key="backgroundColor" name="background"/>
+                    <constraints>
+                        <constraint firstItem="UpY-YK-uWe" firstAttribute="leading" secondItem="2Ig-tk-MLR" secondAttribute="leading" constant="20" id="PTp-W0-hg5"/>
+                        <constraint firstItem="UpY-YK-uWe" firstAttribute="top" secondItem="2Ig-tk-MLR" secondAttribute="top" id="e7a-ig-Rhw"/>
+                        <constraint firstAttribute="trailing" secondItem="UpY-YK-uWe" secondAttribute="trailing" constant="20" id="kMb-eP-uYz"/>
+                        <constraint firstAttribute="bottom" secondItem="UpY-YK-uWe" secondAttribute="bottom" constant="-37" id="vjN-wJ-0wC"/>
+                    </constraints>
+                </view>
+            </subviews>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <color key="backgroundColor" name="background"/>
+            <constraints>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="2Ig-tk-MLR" secondAttribute="trailing" id="0vB-ij-yuH"/>
+                <constraint firstItem="2Ig-tk-MLR" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="Kt4-cp-wz9"/>
+                <constraint firstItem="2Ig-tk-MLR" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="onA-LI-quv"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="2Ig-tk-MLR" secondAttribute="bottom" id="uw3-0Q-zau"/>
+            </constraints>
+            <point key="canvasLocation" x="137.68115942028987" y="85.714285714285708"/>
+        </view>
+    </objects>
+    <resources>
+        <namedColor name="background">
+            <color red="0.0" green="0.16862745098039217" blue="0.35686274509803922" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </namedColor>
+    </resources>
+</document>
