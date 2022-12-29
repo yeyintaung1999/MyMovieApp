@@ -12,11 +12,8 @@ import RxSwift
 class SerieDetailViewController: UIViewController {
     
     var serieID = 0
-    
-    let serieModel : SerieModelProtocol = SerieModel.shared
+    var viewModel : SerieDetailViewModel!
     var disposeBag = DisposeBag()
-    
-    var trailerurl: String = ""
     
     var serieDetail: SerieDetail? {
         didSet{
@@ -33,26 +30,7 @@ class SerieDetailViewController: UIViewController {
             }
         }
     }
-    
-    var casts: [CastResult]? {
-        didSet{
-            castCollectionView.reloadData()
-        }
-    }
-    
-    var trailers: [TrailerResult]? {
-        didSet{
-            if let trailers = trailers {
-                trailers.forEach { trailer in
-                    if trailer.name == "Official Trailer"{
-                        self.trailerurl = trailer.key ?? ""
-                    } else {
-                        return
-                    }
-                }
-            }
-        }
-    }
+
     
     @IBOutlet weak var seeMoreButton: UIButton!
     @IBOutlet weak var castCollectionView: UICollectionView!
@@ -68,52 +46,55 @@ class SerieDetailViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        fetchSerieDetail(id: serieID)
-        fetchSerieCast(id: serieID)
-        fetchTrailers(id: serieID)
+        self.viewModel = SerieDetailViewModel()
+        viewModel.fetchData(id: serieID)
         
         let gl = CAGradientLayer()
         gl.colors = [UIColor.clear.cgColor,UIColor.black.cgColor]
         gl.frame = self.view.bounds
         self.poster.layer.insertSublayer(gl, at: 0)
-        
-        genreCollection.dataSource = self
+
         genreCollection.delegate = self
         genreCollection.registerCell(identifier: GenreCollectionViewCell.identifier)
-        
-        castCollectionView.dataSource = self
         castCollectionView.delegate = self
         castCollectionView.registerCell(identifier: CastCollectionViewCell.identifier)
+        
+        bindData()
+        addDidSelectedAt()
     }
     
-
-    func fetchSerieDetail(id: Int){
-        serieModel.getSerieDetail(id: id)
+    func bindData(){
+        //MARK: Bind Detail
+        viewModel.fetchSerieDetail(id: serieID)
             .subscribe(onNext: { detail in
                 self.serieDetail = detail
-            })
-            .disposed(by: disposeBag)
+            }).disposed(by: disposeBag)
+        //MARK: Bind Genre List
+        viewModel.genreVOList.bind(to: genreCollection.rx.items(cellIdentifier: GenreCollectionViewCell.identifier, cellType: GenreCollectionViewCell.self)){
+            indexPath, item, cell in
+            cell.genre = item
+        }.disposed(by: disposeBag)
+        //MARK: Bind Cast List
+        viewModel.castList.bind(to: castCollectionView.rx.items(cellIdentifier: CastCollectionViewCell.identifier, cellType: CastCollectionViewCell.self)){
+            index, item, cell in
+            cell.cast = item
+        }.disposed(by: disposeBag)
     }
     
-    func fetchSerieCast(id: Int){
-        serieModel.getSerieCasts(id: id)
-            .subscribe(onNext: { data in
-                self.casts = data
-            })
-            .disposed(by: disposeBag)
+    func addDidSelectedAt(){
+        self.castCollectionView.rx.itemSelected
+            .subscribe(onNext: { indexpath in
+                self.onTapCast(id: self.viewModel.getSelectedCastID(indexPath: indexpath))
+            }).disposed(by: disposeBag)
     }
     
-    func fetchTrailers(id: Int){
-        serieModel.getSerieTrailers(id: id)
-            .subscribe(onNext: { trailers in
-                self.trailers = trailers
-            })
-            .disposed(by: disposeBag)
+    func onTapCast(id: Int){
+        self.navigateToCastDetailViewController(id: id)
     }
     
     @IBAction func onTapTrailer(_ sender: UIButton) {
         let vc = YoutubePlayerViewController()
-        vc.stringURL = self.trailerurl
+        vc.stringURL = self.viewModel.trailerKey
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -128,34 +109,10 @@ class SerieDetailViewController: UIViewController {
             seeMoreButton.setImage(UIImage(systemName: "arrow.down"), for: .normal)
         }
     }
-    
-
 }
 
-extension SerieDetailViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if collectionView == genreCollection {
-            return self.serieDetail?.genres?.count ?? 1
-        }else {
-            return self.casts?.count ?? 1
-        }
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        if collectionView == genreCollection {
-            let cell = collectionView.dequeueCell(identifier: GenreCollectionViewCell.identifier, indexPath: indexPath) as GenreCollectionViewCell
-            let genre = self.serieDetail?.genres?[indexPath.row]
-            let genrevo = GenreVO(id: genre?.id ?? 0, name: genre?.name ?? "default", isSelected: false)
-            cell.genre = genrevo
-            
-            return cell
-        } else {
-            let cell = collectionView.dequeueCell(identifier: CastCollectionViewCell.identifier, indexPath: indexPath) as CastCollectionViewCell
-            cell.cast = self.casts?[indexPath.row]
-            return cell
-        }
-    }
-    
+extension SerieDetailViewController: UICollectionViewDelegateFlowLayout{
+
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         if collectionView == genreCollection {
@@ -164,14 +121,6 @@ extension SerieDetailViewController: UICollectionViewDataSource, UICollectionVie
             return CGSize(width: view.frame.width * 0.25 , height: castCollectionView.frame.height)
         }
         
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        if collectionView == castCollectionView {
-            guard let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: String(describing: CastDetailViewController.self)) as? CastDetailViewController else {return}
-            vc.castID = casts?[indexPath.row].id ?? 0
-            navigationController?.pushViewController(vc, animated: true)
-        }
     }
     
     func widthOfString(text: String, font: UIFont)->CGFloat{

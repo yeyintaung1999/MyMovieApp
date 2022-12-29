@@ -29,7 +29,7 @@ extension UIViewController{
     }
     
     func navigateToCastDetailViewController(id: Int){
-        print("tapped cast detail")
+        
         guard let vc = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: String(describing: CastDetailViewController.self)) as? CastDetailViewController else {return}
         vc.castID = id
         self.navigationController?.pushViewController(vc, animated: true)

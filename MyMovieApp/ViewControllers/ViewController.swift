@@ -7,15 +7,13 @@
 
 import UIKit
 import RxSwift
+import RxDataSources
 
 class ViewController: UIViewController {
 
-    @IBOutlet weak var mainTableView: UITableView!
+    var viewModel: HomeViewModel!
     
-    var upcomingMovies: [MovieResult]?
-    var popularMovies: [MovieResult]?
-    var popularSeries: [SerieResult]?
-    var genreList: [GenreResult]?
+    @IBOutlet weak var mainTableView: UITableView!
     
     let movieModel = MovieModel.shared
     let serieModel = SerieModel.shared
@@ -24,62 +22,63 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.backButtonTitle = ""
+        
+        self.viewModel = HomeViewModel()
         // Do any additional setup after loading the view.
         setupMainTableView()
-        fetchData()
+        
+        self.viewModel.fetchAllData()
+        self.bindData()
+    }
+    
+    func bindData(){
+        viewModel.homeItemList
+            .throttle(.milliseconds(90), scheduler: MainScheduler.instance)
+            .bind(to: mainTableView.rx.items(dataSource: initRxDataSource()))
+            .disposed(by: disposeBag)
+    }
+    
+    func initRxDataSource()->RxTableViewSectionedReloadDataSource<HomeViewSectionModel>{
+        return RxTableViewSectionedReloadDataSource<HomeViewSectionModel>.init{ (datasource, tableView, indexPath, items) in
+            switch items {
+                    
+                case .upcomingMovieSection(items: let items):
+                    let cell = tableView.dequeueCell(identifier: PopularTableViewCell.identifier, indexPath: indexPath) as PopularTableViewCell
+                    cell.movies = items
+                    cell.navigateDelegate = self
+                    return cell
+                case .popularMovieSection(items: let items):
+                    let cell = tableView.dequeueCell(identifier: MovTableViewCell.identifier, indexPath: indexPath) as MovTableViewCell
+                    cell.movieDelegate = self
+                    cell.title = "Popular Movies"
+                    cell.movies = items
+                    return cell
+                case .popularSerieSection(items: let items):
+                    let cell = tableView.dequeueCell(identifier: SerieTableViewCell.identifier, indexPath: indexPath) as SerieTableViewCell
+                    cell.movieDelegate = self
+                    cell.series = items
+                    return cell
+
+                case .genreListSection(items: let items):
+                    let cell = tableView.dequeueCell(identifier: GenreTableViewCell.identifier, indexPath: indexPath) as GenreTableViewCell
+                    let genreVOList: [GenreVO]? = items.map({ (genre) in
+                        return GenreVO(id: genre.id ?? 0, name: genre.name ?? "", isSelected: false)
+                    })
+                    genreVOList?.first?.isSelected=true
+                    cell.genreVOList = genreVOList
+                    cell.allMovies = self.viewModel.moviesForGenreList()
+                    cell.movieDelegate = self
+                    return cell
+            }
+        }
     }
     
     func setupMainTableView(){
         mainTableView.delegate = self
-        mainTableView.dataSource = self
         mainTableView.registerCell(identifier: PopularTableViewCell.identifier)
         mainTableView.registerCell(identifier: MovTableViewCell.identifier)
         mainTableView.registerCell(identifier: SerieTableViewCell.identifier)
         mainTableView.registerCell(identifier: GenreTableViewCell.identifier)
-    }
-    
-    func fetchData(){
-        
-        getUpcomingMovies()
-        getPopularMovies()
-        getPopularSeries()
-        getGenreList()
-    }
-    
-    func getUpcomingMovies(){
-        movieModel.getUpcomingMovies()
-            .subscribe(onNext: { data in
-                self.upcomingMovies = data
-                self.mainTableView.reloadData()
-            })
-            .disposed(by: disposeBag)
-    }
-    
-    func getPopularMovies(){
-        movieModel.getPopularMovies()
-            .subscribe(onNext: { data in
-                self.popularMovies = data
-                self.mainTableView.reloadData()
-            })
-            .disposed(by: disposeBag)
-    }
-    
-    func getPopularSeries(){
-        serieModel.getPopularSeries()
-            .subscribe(onNext: { data in
-                self.popularSeries = data
-                self.mainTableView.reloadData()
-            })
-            .disposed(by: disposeBag)
-    }
-
-    func getGenreList(){
-        movieModel.getGenreList()
-            .subscribe(onNext: { data in
-                self.genreList = data
-                self.mainTableView.reloadData()
-            })
-            .disposed(by: disposeBag)
     }
     
     
@@ -89,43 +88,9 @@ class ViewController: UIViewController {
     
 }
 
-extension ViewController: UITableViewDelegate, UITableViewDataSource {
+extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 4
-    }
-    
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row == 0 {
-            let cell = tableView.dequeueCell(identifier: PopularTableViewCell.identifier, indexPath: indexPath) as PopularTableViewCell
-            cell.movies = self.upcomingMovies ?? [MovieResult]()
-            cell.navigateDelegate = self
-            return cell
-        } else if indexPath.row == 1 {
-            let cell = tableView.dequeueCell(identifier: MovTableViewCell.identifier, indexPath: indexPath) as MovTableViewCell
-            cell.movieDelegate = self
-            cell.title = "Popular Movies"
-            cell.movies = self.popularMovies ?? [MovieResult]()
-            return cell
-        } else if indexPath.row == 2 {
-            let cell = tableView.dequeueCell(identifier: SerieTableViewCell.identifier, indexPath: indexPath) as SerieTableViewCell
-            cell.movieDelegate = self
-            cell.series = self.popularSeries ?? [SerieResult]()
-            return cell
-        } else if indexPath.row == 3 {
-            let cell = tableView.dequeueCell(identifier: GenreTableViewCell.identifier, indexPath: indexPath) as GenreTableViewCell
-            let genreVOList: [GenreVO]? = self.genreList?.map({ (genre) in
-                return GenreVO(id: genre.id ?? 0, name: genre.name ?? "", isSelected: false)
-            })
-            genreVOList?.first?.isSelected=true
-            cell.genreVOList = genreVOList
-            cell.allMovies = self.popularMovies
-            cell.movieDelegate = self
-            return cell
-        }
-        else {
-            return UITableViewCell()
-        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

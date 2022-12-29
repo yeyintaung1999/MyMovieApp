@@ -54,6 +54,6 @@ extension PopularTableViewCell: UICollectionViewDelegate, UICollectionViewDataSo
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         navigateDelegate?.onTapMovie(movieID: movies?[indexPath.row].id ?? 0)
-        print("Tapped")
+        
     }
 }

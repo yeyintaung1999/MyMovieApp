@@ -16,7 +16,7 @@ protocol MovieModelProtocol {
     func getGenreList()->Observable<[GenreResult]>
     func getMovieCasts(id: Int)->Observable<[CastResult]>
     func getMovieTrailer(id: Int)->Observable<[TrailerResult]>
-    func getSearchResult(query: String, page: Int)->Observable<[MovieResult]>
+    func getSearchResult(query: String, page: Int)->Observable<UpcomingMOV>
 }
 
 class MovieModel: BaseModel, MovieModelProtocol {
@@ -86,11 +86,9 @@ class MovieModel: BaseModel, MovieModelProtocol {
             }
     }
     
-    func getSearchResult(query: String, page: Int) -> Observable<[MovieResult]> {
+    func getSearchResult(query: String, page: Int) -> Observable<UpcomingMOV> {
         return rxnetworkAgent.searchMovie(query: query, page: page)
-            .flatMap { movies -> Observable<[MovieResult]> in
-                return Observable.just(movies.results ?? [MovieResult]())
-            }
+            
     }
     
 }

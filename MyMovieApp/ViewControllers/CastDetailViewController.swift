@@ -11,6 +11,8 @@ import RxSwift
 
 class CastDetailViewController: UIViewController {
     
+    var viewModel : CastDetailViewModel!
+    
     var castDetail: CastDetail? {
         didSet{
             if let castDetail = castDetail {
@@ -21,17 +23,9 @@ class CastDetailViewController: UIViewController {
                 self.placeOFBirth.text = castDetail.placeOfBirth ?? "null"
                 self.biography.text = castDetail.biography ?? "null"
             }
-            
         }
     }
-    
-    var credits: [MovieResult]?{
-        didSet{
-            self.movieCreditCollectionView.reloadData()
-        }
-    }
-    
-    let actorModel: ActorModelProtocol = ActorModel.shared
+
     var disposebag = DisposeBag()
     var castID: Int = 0
     
@@ -46,38 +40,48 @@ class CastDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        viewModel = CastDetailViewModel()
+        viewModel.fetchMovieCredits(id: castID)
         clipDetailViewTopCorners()
-        fetchCastDetail(id: castID)
-        fetchMovieCredit(id: castID)
+
         // Do any additional setup after loading the view.
         
-        movieCreditCollectionView.dataSource = self
         movieCreditCollectionView.delegate = self
         movieCreditCollectionView.registerCell(identifier: MovCollectionViewCell.identifier)
+        
+        bindData()
+        addDidSelectedItemAt()
+    }
+    
+    func bindData(){
+        //MARK: Bind Cast Detail
+        viewModel.fetchCastDetail(id: castID)
+            .subscribe(onNext: { detail in
+                self.castDetail = detail
+            }).disposed(by: disposebag)
+        //MARK: Bind Movie Credits
+        viewModel.creditList.bind(to: movieCreditCollectionView.rx.items(cellIdentifier: MovCollectionViewCell.identifier, cellType: MovCollectionViewCell.self)){ indexpath, item, cell in
+            cell.movie = item
+        }.disposed(by: disposebag)
+    }
+    
+    func addDidSelectedItemAt(){
+        movieCreditCollectionView.rx.itemSelected
+            .subscribe(onNext: { indexPath in
+                self.onTapMovieCredit(id: self.viewModel.getSelectedMovieID(indexpath: indexPath))
+            })
+            .disposed(by: disposebag)
+    }
+    
+    func onTapMovieCredit(id : Int){
+        self.navigateToMovieDetailViewController(id: id)
     }
     
     func clipDetailViewTopCorners(){
         self.DetailStackView.layer.cornerRadius = 30
     }
     
-    func fetchCastDetail(id: Int){
-        actorModel.getCastDetail(id: id)
-            .subscribe(onNext: { detail in
-                self.castDetail = detail
-            })
-            .disposed(by: disposebag)
-    }
-    
-    func fetchMovieCredit(id: Int) {
-        actorModel.getMovieCredits(id: id)
-            .subscribe(onNext: { data in
-                self.credits = data
-            })
-            .disposed(by: disposebag)
-    }
-    
     @IBAction func onTapSeeMore(_ sender: UIButton) {
-        
         if biography.numberOfLines == 3 {
             self.biography.numberOfLines = 0
             self.seemoreButton.setTitle("See Less", for: .normal)
@@ -87,27 +91,12 @@ class CastDetailViewController: UIViewController {
             self.seemoreButton.setTitle("See More", for: .normal)
             self.seemoreButton.setImage(UIImage(systemName: "arrow.down"), for: .normal)
         }
-        
     }
     
 }
 
-extension CastDetailViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return credits?.count ?? 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueCell(identifier: MovCollectionViewCell.identifier, indexPath: indexPath) as MovCollectionViewCell
-        cell.movie = credits?[indexPath.row]
-        return cell
-    }
-    
+extension CastDetailViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: view.frame.width * 0.25, height: movieCreditCollectionView.frame.height)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        navigateToMovieDetailViewController(id: self.credits?[indexPath.row].id ?? 0)
     }
 }

@@ -12,46 +12,29 @@ import RxCocoa
 class SearchViewController: UIViewController {
     
     let searchBar: UISearchBar = UISearchBar()
-    
-    let movieModel : MovieModelProtocol = MovieModel.shared
-    var disposeBag = DisposeBag()
+
+    var viewModel : SearchMovieViewModel!
     
     @IBOutlet weak var resultCollectionView: UICollectionView!
-    var movies: [MovieResult]?{
-        didSet{
-            resultCollectionView.reloadData()
-        }
-    }
     
     var disposebag = DisposeBag()
-    
-    var movieDelegate: MovieDelegate?=nil
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        viewModel = SearchMovieViewModel()
         initView()
-        RxSearchMovie()
+        initObservers()
         // Do any additional setup after loading the view.
     }
     
     func initView(){
         resultCollectionView.delegate = self
-        resultCollectionView.dataSource = self
         resultCollectionView.registerCell(identifier: MovCollectionViewCell.identifier)
         
         searchBar.placeholder = "Search ..."
         searchBar.searchTextField.textColor = UIColor(named: "label")
         navigationItem.titleView = searchBar
-        
-    }
-    
-    func searchMovie(query: String, page: Int){
-        movieModel.getSearchResult(query: query, page: page)
-            .subscribe(onNext: { result in
-                self.movies = result
-            })
-            .disposed(by: disposebag)
     }
     
     func attriString(text: String)-> NSAttributedString {
@@ -60,7 +43,12 @@ class SearchViewController: UIViewController {
         return string
     }
     
-
+    func initObservers(){
+        RxSearchMovie()
+        bindResult()
+        handlePagination()
+        addDidSelectItemAt()
+    }
     
 }
 
@@ -72,38 +60,55 @@ extension SearchViewController {
             .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
             .subscribe(onNext: { value in
                 if value.isEmpty {
-                    print("Empty Search")
+                    self.viewModel.handleEmptySearch()
                 } else {
                     let value1 = value.addingPercentEncoding(withAllowedCharacters: .urlHostAllowed)!
-                    self.searchMovie(query: value1, page: 1)
+                    self.viewModel.searchMovie(query: value1)
                 }
             })
             .disposed(by: disposebag)
+    }
+    
+    func bindResult(){
+        self.viewModel.searchResult.bind(to: resultCollectionView.rx.items(cellIdentifier: MovCollectionViewCell.identifier, cellType: MovCollectionViewCell.self)){ indexPath, element, cell in
+            cell.movie = element
+        }.disposed(by: disposebag)
+    }
+    
+    func handlePagination(){
+        Observable.combineLatest(
+            self.resultCollectionView.rx.willDisplayCell,
+            searchBar.rx.text.orEmpty
+        )
+        .subscribe(onNext: { cellAndIndexPath,query in
+            let (_,indexPath) = cellAndIndexPath
+            self.viewModel.handlePagination(indexpath: indexPath, query: query)
+        }).disposed(by: disposebag)
+    }
+    
+    func addDidSelectItemAt(){
+        self.resultCollectionView.rx.itemSelected
+            .subscribe(onNext: { indexpath in
+                self.onTapMovie(id: self.viewModel.getSelectedMovieID(indexPath: indexpath))
+            })
+            .disposed(by: disposebag)
+    }
+    
+    func onTapMovie(id: Int){
+        self.navigateToMovieDetailViewController(id: id)
     }
 }
 
 
 
 //MARK: CollectionView FlowLayout Delegate
-extension SearchViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UICollectionViewDataSource {
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.movies?.count ?? 0
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueCell(identifier: MovCollectionViewCell.identifier, indexPath: indexPath) as MovCollectionViewCell
-        cell.movie = self.movies?[indexPath.row]
-        return cell
-    }
+extension SearchViewController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = searchBar.frame.width * 0.27
         return CGSize(width: width, height: width*1.5)
     }
-    
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        navigateToMovieDetailViewController(id: movies?[indexPath.row].id ?? 0)
-        print("\(movies?[indexPath.row].id ?? 0000)")
-    }
+
     
 }

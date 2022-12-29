@@ -53,7 +53,6 @@ extension SerieTableViewCell: UICollectionViewDelegate, UICollectionViewDelegate
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let id = series?[indexPath.row].id ?? 0
-        print("Tapped \(id)")
         movieDelegate?.onTapSerie(serieID: id)
     }
 }
