@@ -6,20 +6,22 @@
 //
 
 import UIKit
+import RxSwift
 
 class MovieDetailViewController: UIViewController {
     
-    var networkAgent = NetworkAgent.shared
+    var movieModel: MovieModelProtocol = MovieModel.shared
+    var disposebag = DisposeBag()
     var movieID : Int = 0
     
-    var trailers: MovieTrailers? {
+    var trailers: [TrailerResult]? {
         didSet{
             if let trailers = trailers {
-                trailers.results?.forEach({ trailer in
+                trailers.forEach({ trailer in
                     if trailer.name == "Official Trailer" {
                         self.trailerurl = trailer.key ?? ""
                     } else if trailer.name == "" {
-                        self.trailerurl = trailers.results?.first?.key ?? ""
+                        self.trailerurl = trailers.first?.key ?? ""
                     }
                 })
             }
@@ -56,7 +58,7 @@ class MovieDetailViewController: UIViewController {
     
     var movieCasts: [CastResult]? {
         didSet{
-            if let movieCasts = movieCasts {
+            if let _ = movieCasts {
                 castCollectionView.reloadData()
             }
         }
@@ -123,37 +125,27 @@ class MovieDetailViewController: UIViewController {
     
     
     func fetchDetail(){
-        networkAgent.getMovieDetail(id: movieID) { result in
-            switch result {
-                case .success(let data):
-                    self.movieDetail = data
-                case .failure(let msg):
-                    print(msg)
-            }
-        }
+        movieModel.getMovieDetail(id: movieID)
+            .subscribe(onNext: { detail in
+                self.movieDetail = detail
+            })
+            .disposed(by: disposebag)
     }
     
     func fetchCasts(){
-        networkAgent.getMovieCasts(id: movieID) { result in
-            switch result {
-                case .success(let data):
-                    self.movieCasts = data
-                case .failure(let msg):
-                    print(msg)
-            }
-        }
+        movieModel.getMovieCasts(id: movieID)
+            .subscribe(onNext: { data in
+                self.movieCasts = data
+            })
+            .disposed(by: disposebag)
     }
     
     func fetchTrailers(){
-        networkAgent.getTrailers(id: movieID) { result in
-            switch result{
-                case .success(let data):
-                    self.trailers = data
-                case .failure(let msg):
-                    print(msg)
-                
-            }
-        }
+        movieModel.getMovieTrailer(id: movieID)
+            .subscribe(onNext: { data in
+                self.trailers = data
+            })
+            .disposed(by: disposebag)
     }
 
 }

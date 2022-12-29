@@ -7,6 +7,7 @@
 
 import UIKit
 import SDWebImage
+import RxSwift
 
 class CastDetailViewController: UIViewController {
     
@@ -30,7 +31,8 @@ class CastDetailViewController: UIViewController {
         }
     }
     
-    var networkAgent = NetworkAgent.shared
+    let actorModel: ActorModelProtocol = ActorModel.shared
+    var disposebag = DisposeBag()
     var castID: Int = 0
     
     @IBOutlet weak var seemoreButton: UIButton!
@@ -59,26 +61,19 @@ class CastDetailViewController: UIViewController {
     }
     
     func fetchCastDetail(id: Int){
-        networkAgent.getCastDetail(id: id) { result in
-            switch result{
-                case .success(let data):
-                    self.castDetail = data
-                case .failure(let msg):
-                    print(msg)
-                
-            }
-        }
+        actorModel.getCastDetail(id: id)
+            .subscribe(onNext: { detail in
+                self.castDetail = detail
+            })
+            .disposed(by: disposebag)
     }
     
     func fetchMovieCredit(id: Int) {
-        networkAgent.getMovieCredit(id: id) { result in
-            switch result {
-                case .success(let data):
-                    self.credits = data
-                case .failure(let msg):
-                    print(msg)
-            }
-        }
+        actorModel.getMovieCredits(id: id)
+            .subscribe(onNext: { data in
+                self.credits = data
+            })
+            .disposed(by: disposebag)
     }
     
     @IBAction func onTapSeeMore(_ sender: UIButton) {

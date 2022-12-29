@@ -12,7 +12,9 @@ import RxCocoa
 class SearchViewController: UIViewController {
     
     let searchBar: UISearchBar = UISearchBar()
-    let networkAgent = NetworkAgent.shared
+    
+    let movieModel : MovieModelProtocol = MovieModel.shared
+    var disposeBag = DisposeBag()
     
     @IBOutlet weak var resultCollectionView: UICollectionView!
     var movies: [MovieResult]?{
@@ -45,15 +47,11 @@ class SearchViewController: UIViewController {
     }
     
     func searchMovie(query: String, page: Int){
-        networkAgent.searchMovie(query: query, page: page) { results in
-            switch results{
-                case .success(let result):
-                    self.movies = result
-                    print(result.count)
-                case .failure(let msg):
-                    print(msg)
-            }
-        }
+        movieModel.getSearchResult(query: query, page: page)
+            .subscribe(onNext: { result in
+                self.movies = result
+            })
+            .disposed(by: disposebag)
     }
     
     func attriString(text: String)-> NSAttributedString {

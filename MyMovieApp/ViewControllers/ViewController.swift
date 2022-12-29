@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RxSwift
 
 class ViewController: UIViewController {
 
@@ -16,7 +17,9 @@ class ViewController: UIViewController {
     var popularSeries: [SerieResult]?
     var genreList: [GenreResult]?
     
-    let networkAgent = NetworkAgent.shared
+    let movieModel = MovieModel.shared
+    let serieModel = SerieModel.shared
+    let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,53 +47,39 @@ class ViewController: UIViewController {
     }
     
     func getUpcomingMovies(){
-        networkAgent.getUpcomingMovies { result in
-            switch result {
-                case .success(let data):
-                    self.upcomingMovies = data
-                    self.mainTableView.reloadData()
-                case .failure(let msg):
-                    print(msg)
-            }
-        }
-        
+        movieModel.getUpcomingMovies()
+            .subscribe(onNext: { data in
+                self.upcomingMovies = data
+                self.mainTableView.reloadData()
+            })
+            .disposed(by: disposeBag)
     }
     
     func getPopularMovies(){
-        networkAgent.getPopularMovies { results in
-            switch results{
-                case .success(let data):
-                    self.popularMovies = data
-                    self.mainTableView.reloadData()
-                case .failure(let msg):
-                    print(msg)
-            }
-        }
+        movieModel.getPopularMovies()
+            .subscribe(onNext: { data in
+                self.popularMovies = data
+                self.mainTableView.reloadData()
+            })
+            .disposed(by: disposeBag)
     }
     
     func getPopularSeries(){
-        networkAgent.getPopularseries { results in
-            switch results {
-                case .success(let data):
-                    self.popularSeries = data
-                    self.mainTableView.reloadData()
-                case .failure(let msg):
-                    print(msg)
-            }
-        }
+        serieModel.getPopularSeries()
+            .subscribe(onNext: { data in
+                self.popularSeries = data
+                self.mainTableView.reloadData()
+            })
+            .disposed(by: disposeBag)
     }
 
     func getGenreList(){
-        networkAgent.getGenreList { result in
-            switch result {
-                case .success(let data):
-                    self.genreList = data
-                    
-                    self.mainTableView.reloadData()
-                case .failure(let msg):
-                    print(msg)
-            }
-        }
+        movieModel.getGenreList()
+            .subscribe(onNext: { data in
+                self.genreList = data
+                self.mainTableView.reloadData()
+            })
+            .disposed(by: disposeBag)
     }
     
     

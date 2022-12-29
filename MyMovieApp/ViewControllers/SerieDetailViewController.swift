@@ -7,11 +7,14 @@
 
 import UIKit
 import SDWebImage
+import RxSwift
 
 class SerieDetailViewController: UIViewController {
     
     var serieID = 0
-    let networkAgent = NetworkAgent.shared
+    
+    let serieModel : SerieModelProtocol = SerieModel.shared
+    var disposeBag = DisposeBag()
     
     var trailerurl: String = ""
     
@@ -85,37 +88,27 @@ class SerieDetailViewController: UIViewController {
     
 
     func fetchSerieDetail(id: Int){
-        networkAgent.getSerieDetail(id: id) { response in
-            switch response {
-                case .success(let detail):
-                    self.serieDetail = detail
-                    print("\(detail.posterPath ?? "")")
-                case .failure(let msg):
-                    print(msg)
-            }
-        }
+        serieModel.getSerieDetail(id: id)
+            .subscribe(onNext: { detail in
+                self.serieDetail = detail
+            })
+            .disposed(by: disposeBag)
     }
     
     func fetchSerieCast(id: Int){
-        networkAgent.getSerieCasts(id: id) { result in
-            switch result {
-                case .success(let data):
-                    self.casts = data
-                case .failure(let msg):
-                    print(msg)
-            }
-        }
+        serieModel.getSerieCasts(id: id)
+            .subscribe(onNext: { data in
+                self.casts = data
+            })
+            .disposed(by: disposeBag)
     }
     
     func fetchTrailers(id: Int){
-        networkAgent.getSerieTrailers(id: id) { result in
-            switch result{
-                case .success(let data):
-                    self.trailers = data
-                case .failure(let msg):
-                    print(msg)
-            }
-        }
+        serieModel.getSerieTrailers(id: id)
+            .subscribe(onNext: { trailers in
+                self.trailers = trailers
+            })
+            .disposed(by: disposeBag)
     }
     
     @IBAction func onTapTrailer(_ sender: UIButton) {

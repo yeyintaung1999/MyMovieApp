@@ -6,6 +6,8 @@
 //
 import Foundation
 import Alamofire
+import RxAlamofire
+import RxSwift
 
 protocol NetworkAgentProtocol {
     func getUpcomingMovies(completion: @escaping(MDBResult<[MovieResult]>)->())
@@ -14,6 +16,13 @@ protocol NetworkAgentProtocol {
     func getGenreList(completion: @escaping (MDBResult<[GenreResult]>)->())
     func searchMovie(query: String,page: Int, completion: @escaping (MDBResult<[MovieResult]>)->())
     func getMovieDetail(id: Int, completion: @escaping (MDBResult<MovieDetail>)->())
+    func getMovieCasts(id: Int, completion: @escaping (MDBResult<[CastResult]>)->())
+    func getTrailers(id: Int, completion: @escaping(MDBResult<MovieTrailers>)->())
+    func getSerieDetail(id: Int, completion: @escaping (MDBResult<SerieDetail>)->())
+    func getSerieCasts(id: Int, completion: @escaping (MDBResult<[CastResult]>)->())
+    func getSerieTrailers(id: Int, completion: @escaping (MDBResult<[TrailerResult]>)->())
+    func getCastDetail(id: Int, completion: @escaping (MDBResult<CastDetail>)->())
+    func getMovieCredit(id: Int, completion: @escaping (MDBResult<[MovieResult]>)->())
 }
 
 class NetworkAgent: NetworkAgentProtocol {
