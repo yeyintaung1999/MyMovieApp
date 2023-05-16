@@ -4,6 +4,7 @@
 //   let upcomingMOV = try? newJSONDecoder().decode(UpcomingMOV.self, from: jsonData)
 
 import Foundation
+import CoreData
 
 // MARK: - UpcomingMOV
 struct UpcomingMOV: Codable {
@@ -38,10 +39,28 @@ struct MovieResult: Codable, Hashable {
     let voteAverage: Double?
     let voteCount: Int?
     let character: String?=nil
-        let creditID: String?=nil
+    let creditID: String?=nil
     let order: Int?=nil
     let department: String?=nil
-        let job: String?=nil
+    let job: String?=nil
+    
+    func toMovieEntity(context: NSManagedObjectContext, type: BelongsToTypeEntity)->MovieEntity{
+        let entity = MovieEntity(context: context)
+        entity.adult = adult ?? false
+        entity.backdropPath = backdropPath ?? ""
+        entity.genreIds = genreIDS?.map{ String($0) }.joined(separator: ",")
+        entity.id = Int32(id ?? 0)
+        entity.originalLanguage = originalLanguage?.rawValue
+        entity.originalTitle = originalTitle
+        entity.overview = overview
+        entity.popularity = popularity ?? 0.00
+        entity.posterPath = posterPath
+        entity.releaseDate = releaseDate
+        entity.title = title
+        entity.voteAverage = voteAverage ?? 0.00
+        entity.addToBelongsToType(type)
+        return entity
+    }
 
     enum CodingKeys: String, CodingKey {
         case adult
@@ -60,8 +79,6 @@ struct MovieResult: Codable, Hashable {
         case creditID = "credit_id"
         case order, department, job
     }
-    
-  
 }
 
 enum OriginalLanguage: String, Codable {

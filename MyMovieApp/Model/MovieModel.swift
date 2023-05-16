@@ -22,30 +22,28 @@ protocol MovieModelProtocol {
 class MovieModel: BaseModel, MovieModelProtocol {
     
     static let shared: MovieModelProtocol = MovieModel()
-    
-    
+    var disposeBag = DisposeBag()
+    let genreRepo = GenreRepository.shared
+    let movieRepo = MovieRepository.shared
+    let contentTypeRepo = ContentTypeRepository.shared
     
     private override init(){}
     
     func getUpcomingMovies() -> Observable<[MovieResult]> {
-        return rxnetworkAgent.getUpcomingMovies()
-            .flatMap { (mov)->Observable<[MovieResult]> in
-                return Observable.create { observer in
-                    observer.onNext(mov.results ?? [MovieResult]())
-                    observer.onCompleted()
-                    return Disposables.create()
-                }
+        let remoteData = rxnetworkAgent.getUpcomingMovies()
+        return remoteData
+            .flatMap { data -> Observable<[MovieResult]> in
+                self.movieRepo.saveMovies(type: .upcoming, data: data)
+                return self.contentTypeRepo.getMovies(type: .upcoming)
             }
     }
     
     func getPopularMovies() -> Observable<[MovieResult]> {
-        return rxnetworkAgent.getPopularMovies()
-            .flatMap { movies -> Observable<[MovieResult]> in
-                return Observable.create { observer in
-                    observer.onNext(movies.results ?? [MovieResult]())
-                    observer.onCompleted()
-                    return Disposables.create()
-                }
+        let remoteData = rxnetworkAgent.getPopularMovies()
+        return remoteData
+            .flatMap { (data) -> Observable<[MovieResult]> in
+                self.movieRepo.saveMovies(type: .popularMovie, data: data)
+                return self.contentTypeRepo.getMovies(type: .popularMovie)
             }
     }
     
@@ -54,13 +52,12 @@ class MovieModel: BaseModel, MovieModelProtocol {
     }
     
     func getGenreList()->Observable<[GenreResult]>{
-        return rxnetworkAgent.getGenreList()
-            .flatMap { genres->Observable<[GenreResult]> in
-                return Observable.create { observer in
-                    observer.onNext(genres.genres ?? [GenreResult]())
-                    observer.onCompleted()
-                    return Disposables.create()
-                }
+        let remoteObservableResult = rxnetworkAgent.getGenreList()
+        
+        return remoteObservableResult
+            .flatMap { genre -> Observable<[GenreResult]> in
+                self.genreRepo.saveGenres(genres: genre)
+                return self.genreRepo.getGenres()
             }
     }
     

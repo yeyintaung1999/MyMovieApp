@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="20037" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1bE-v2-X6Q">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="21507" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="1bE-v2-X6Q">
     <device id="retina6_1" orientation="portrait" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="21505"/>
         <capability name="Image references" minToolsVersion="12.0"/>
         <capability name="Named colors" minToolsVersion="9.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
@@ -21,7 +21,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="ncB-tZ-3oH">
-                                <rect key="frame" x="0.0" y="88" width="414" height="808"/>
+                                <rect key="frame" x="0.0" y="92" width="414" height="804"/>
                                 <color key="backgroundColor" name="background"/>
                                 <color key="sectionIndexBackgroundColor" name="background"/>
                             </tableView>
@@ -62,10 +62,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zng-G1-gnB" userLabel="PosterView">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="108"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="film" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="Vjn-cd-2j7">
-                                        <rect key="frame" x="0.0" y="89" width="414" height="17.5"/>
+                                        <rect key="frame" x="0.0" y="93" width="414" height="801.5"/>
                                         <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     </imageView>
@@ -73,9 +73,8 @@
                                 <viewLayoutGuide key="safeArea" id="gsZ-Bj-GkH"/>
                                 <color key="backgroundColor" name="background"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" relation="lessThanOrEqual" constant="896" id="HrP-Po-AeA"/>
+                                    <constraint firstAttribute="bottom" secondItem="Vjn-cd-2j7" secondAttribute="bottom" id="Pbh-0u-vK4"/>
                                     <constraint firstItem="Vjn-cd-2j7" firstAttribute="top" secondItem="gsZ-Bj-GkH" secondAttribute="top" id="Uqu-Zl-EzY"/>
-                                    <constraint firstAttribute="bottom" secondItem="Vjn-cd-2j7" secondAttribute="bottom" id="iE2-yQ-dX7"/>
                                     <constraint firstAttribute="trailing" secondItem="Vjn-cd-2j7" secondAttribute="trailing" id="pBF-Ep-xrg"/>
                                     <constraint firstItem="Vjn-cd-2j7" firstAttribute="leading" secondItem="zng-G1-gnB" secondAttribute="leading" id="uuJ-qg-N4n"/>
                                 </constraints>
@@ -399,6 +398,7 @@
                         <viewLayoutGuide key="safeArea" id="2p6-zO-l6b"/>
                         <color key="backgroundColor" name="background"/>
                         <constraints>
+                            <constraint firstAttribute="bottom" secondItem="zng-G1-gnB" secondAttribute="bottom" id="7l5-nx-WRD"/>
                             <constraint firstItem="zng-G1-gnB" firstAttribute="top" secondItem="72A-YH-5ih" secondAttribute="top" id="8FI-bK-yt6"/>
                             <constraint firstItem="cRn-Kp-8IW" firstAttribute="leading" secondItem="72A-YH-5ih" secondAttribute="leading" id="CXL-WP-GK5"/>
                             <constraint firstItem="zng-G1-gnB" firstAttribute="leading" secondItem="72A-YH-5ih" secondAttribute="leading" id="EiL-7N-itS"/>
@@ -434,10 +434,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fRY-Sk-bNa" userLabel="PosterView">
-                                <rect key="frame" x="0.0" y="0.0" width="414" height="64"/>
+                                <rect key="frame" x="0.0" y="0.0" width="414" height="68"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="film" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="0Aq-Xc-OBI">
-                                        <rect key="frame" x="0.0" y="45" width="414" height="17.5"/>
+                                        <rect key="frame" x="0.0" y="49" width="414" height="17.5"/>
                                         <color key="backgroundColor" white="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <color key="tintColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                     </imageView>
@@ -518,13 +518,13 @@
                                                                         </constraints>
                                                                     </imageView>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="IMBD Rating" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QDW-P9-woA">
-                                                                        <rect key="frame" x="50" y="7" width="95.5" height="16"/>
+                                                                        <rect key="frame" x="50" y="7" width="0.0" height="16"/>
                                                                         <fontDescription key="fontDescription" name="HoeflerText-Regular" family="Hoefler Text" pointSize="16"/>
                                                                         <color key="textColor" name="title"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qUU-md-e3Y">
-                                                                        <rect key="frame" x="145.5" y="0.0" width="228.5" height="30"/>
+                                                                        <rect key="frame" x="50" y="0.0" width="324" height="30"/>
                                                                         <fontDescription key="fontDescription" name="Kefa-Regular" family="Kefa" pointSize="18"/>
                                                                         <color key="textColor" name="label"/>
                                                                         <nil key="highlightedColor"/>
@@ -546,13 +546,13 @@
                                                                         </constraints>
                                                                     </imageView>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Realease Date" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HOT-Ep-fLL">
-                                                                        <rect key="frame" x="50" y="7" width="96" height="16"/>
+                                                                        <rect key="frame" x="50" y="7" width="0.0" height="16"/>
                                                                         <fontDescription key="fontDescription" name="HoeflerText-Regular" family="Hoefler Text" pointSize="16"/>
                                                                         <color key="textColor" name="title"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="d5v-fc-yLT">
-                                                                        <rect key="frame" x="146" y="0.0" width="228" height="30"/>
+                                                                        <rect key="frame" x="50" y="0.0" width="324" height="30"/>
                                                                         <fontDescription key="fontDescription" name="Kefa-Regular" family="Kefa" pointSize="16"/>
                                                                         <color key="textColor" name="label"/>
                                                                         <nil key="highlightedColor"/>
@@ -575,13 +575,13 @@
                                                                         </constraints>
                                                                     </imageView>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Runtime per Episode" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SEn-Lu-aDd">
-                                                                        <rect key="frame" x="50" y="7" width="144" height="16"/>
+                                                                        <rect key="frame" x="50" y="7" width="0.0" height="16"/>
                                                                         <fontDescription key="fontDescription" name="HoeflerText-Regular" family="Hoefler Text" pointSize="16"/>
                                                                         <color key="textColor" name="title"/>
                                                                         <nil key="highlightedColor"/>
                                                                     </label>
                                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EMx-Ro-Sy7">
-                                                                        <rect key="frame" x="194" y="0.0" width="180" height="30"/>
+                                                                        <rect key="frame" x="50" y="0.0" width="324" height="30"/>
                                                                         <fontDescription key="fontDescription" name="Kefa-Regular" family="Kefa" pointSize="16"/>
                                                                         <color key="textColor" name="label"/>
                                                                         <nil key="highlightedColor"/>
@@ -804,7 +804,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="9yO-an-T7m" userLabel="ImageUIView">
-                                <rect key="frame" x="0.0" y="44" width="414" height="500"/>
+                                <rect key="frame" x="0.0" y="48" width="414" height="500"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="Es0-vp-XKu">
                                         <rect key="frame" x="0.0" y="0.0" width="414" height="500"/>
@@ -821,7 +821,7 @@
                                 </constraints>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="09o-0d-qr7">
-                                <rect key="frame" x="0.0" y="44" width="414" height="852"/>
+                                <rect key="frame" x="0.0" y="48" width="414" height="848"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="NOa-Pa-Ltw">
                                         <rect key="frame" x="0.0" y="400" width="414" height="455"/>
@@ -829,7 +829,7 @@
                                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Vqb-gl-ZvM" userLabel="NameUIView">
                                                 <rect key="frame" x="0.0" y="0.0" width="414" height="80"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Gal Gadot" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xZS-gm-zYh">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xZS-gm-zYh">
                                                         <rect key="frame" x="20" y="20" width="374" height="60"/>
                                                         <fontDescription key="fontDescription" name="HoeflerText-Black" family="Hoefler Text" pointSize="27"/>
                                                         <color key="textColor" name="label"/>
@@ -864,7 +864,7 @@
                                                                 <color key="textColor" name="title"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rIN-Km-IDC">
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="rIN-Km-IDC">
                                                                 <rect key="frame" x="119" y="0.0" width="255" height="30"/>
                                                                 <fontDescription key="fontDescription" name="Kefa-Regular" family="Kefa" pointSize="16"/>
                                                                 <color key="textColor" name="label"/>
@@ -901,7 +901,7 @@
                                                                 <color key="textColor" name="title"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="Label" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="rcJ-QJ-zIs">
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" verticalHuggingPriority="251" text="" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="rcJ-QJ-zIs">
                                                                 <rect key="frame" x="154" y="0.0" width="220" height="30"/>
                                                                 <fontDescription key="fontDescription" name="Kefa-Regular" family="Kefa" pointSize="16"/>
                                                                 <color key="textColor" name="label"/>
@@ -932,7 +932,7 @@
                                                                 <color key="textColor" name="label"/>
                                                                 <nil key="highlightedColor"/>
                                                             </label>
-                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4th-1s-MYX">
+                                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" text="" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="4th-1s-MYX">
                                                                 <rect key="frame" x="0.0" y="30" width="374" height="15"/>
                                                                 <fontDescription key="fontDescription" name="HiraginoSans-W3" family="Hiragino Sans" pointSize="14"/>
                                                                 <color key="textColor" name="title"/>
@@ -1053,7 +1053,7 @@
                     <toolbarItems/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" barStyle="black" prompted="NO"/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" barStyle="black" id="1a1-bX-MgR">
-                        <rect key="frame" x="0.0" y="44" width="414" height="44"/>
+                        <rect key="frame" x="0.0" y="48" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" name="background"/>
                         <textAttributes key="titleTextAttributes">
@@ -1076,14 +1076,14 @@
         </scene>
     </scenes>
     <resources>
-        <image name="arrow.down" catalog="system" width="120" height="128"/>
-        <image name="arrowshape.turn.up.left.fill" catalog="system" width="128" height="106"/>
-        <image name="calendar" catalog="system" width="128" height="106"/>
-        <image name="clock" catalog="system" width="128" height="121"/>
+        <image name="arrow.down" catalog="system" width="118" height="128"/>
+        <image name="arrowshape.turn.up.left.fill" catalog="system" width="128" height="104"/>
+        <image name="calendar" catalog="system" width="128" height="107"/>
+        <image name="clock" catalog="system" width="128" height="123"/>
         <image name="film" catalog="system" width="128" height="93"/>
-        <image name="location" catalog="system" width="128" height="118"/>
-        <image name="magnifyingglass" catalog="system" width="128" height="115"/>
-        <image name="play.circle" catalog="system" width="128" height="121"/>
+        <image name="location" catalog="system" width="128" height="121"/>
+        <image name="magnifyingglass" catalog="system" width="128" height="117"/>
+        <image name="play.circle" catalog="system" width="128" height="123"/>
         <image name="star.square" catalog="system" width="128" height="114"/>
         <namedColor name="background">
             <color red="0.0" green="0.16862745098039217" blue="0.35686274509803922" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>

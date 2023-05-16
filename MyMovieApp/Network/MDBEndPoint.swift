@@ -1,9 +1,3 @@
-//
-//  MDBEndPoint.swift
-//  MyMovieApp
-//
-//  Created by Ye Yint Aung on 22/12/2022.
-//
 
 import Foundation
 import Alamofire

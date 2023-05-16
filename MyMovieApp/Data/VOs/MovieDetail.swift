@@ -9,7 +9,7 @@ import Foundation
 struct MovieDetail: Codable {
     let adult: Bool?
     let backdropPath: String?
-    let belongsToCollection: BelongsToCollection?
+    let belongsToCollection: BelongsToCollection?=nil
     let budget: Int?
     let genres: [GenreResult]?
     let homepage: String?
@@ -17,11 +17,11 @@ struct MovieDetail: Codable {
     let imdbID, originalLanguage, originalTitle, overview: String?
     let popularity: Double?
     let posterPath: String?
-    let productionCompanies: [ProductionCompany]?
-    let productionCountries: [ProductionCountry]?
+    let productionCompanies: [ProductionCompany]?=nil
+    let productionCountries: [ProductionCountry]?=nil
     let releaseDate: String?
     let revenue, runtime: Int?
-    let spokenLanguages: [SpokenLanguage]?
+    let spokenLanguages: [SpokenLanguage]?=nil
     let status, tagline, title: String?
     let video: Bool?
     let voteAverage: Double?

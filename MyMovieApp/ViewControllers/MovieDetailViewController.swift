@@ -99,7 +99,7 @@ class MovieDetailViewController: UIViewController {
         let colorTop = UIColor.clear.cgColor
         let colorBottom = UIColor.black.cgColor
         let gradientLayer = CAGradientLayer()
-        gradientLayer.frame = self.view.bounds
+        gradientLayer.frame = CGRect(x: 0, y: 0, width: view.bounds.width, height: view.bounds.height)
         gradientLayer.colors = [colorTop,colorBottom]
         poster.layer.insertSublayer(gradientLayer, at: 0)
     }
